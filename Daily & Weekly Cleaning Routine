@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Barakah Home - Home Care Dashboard</title>
+  
+  <!-- Web App Metadata for iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Barakah Home">
+  <meta name="theme-color" content="#EBF1ED">
+
+  <!-- Google Fonts: Amiri & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --color-sage: #8A9A86;
+      --color-sage-light: #EBF1ED;
+      --color-sage-dark: #4A5847;
+      --color-cream: #FAF8F5;
+      --color-beige: #F0EAE1;
+      --color-terracotta: #C88A75;
+      --color-terracotta-light: #F8EFEA;
+      --color-card-bg: #FFFFFF;
+      --color-text-main: #333C32;
+      --color-text-muted: #6B7769;
+      --color-border: #E2E8E1;
+      --shadow-sm: 0 2px 8px rgba(74, 88, 71, 0.05);
+      --shadow-md: 0 4px 16px rgba(74, 88, 71, 0.08);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--color-sage-light);
+      color: var(--color-text-main);
+      padding-bottom: 90px;
+      line-height: 1.5;
+    }
+
+    .app-container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    header {
+      text-align: center;
+      padding: 16px 8px 12px 8px;
+    }
+
+    .arabic-bismillah {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      color: var(--color-sage-dark);
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--color-sage-dark);
+      letter-spacing: -0.3px;
+    }
+
+    .date-badge {
+      display: inline-block;
+      background: var(--color-beige);
+      color: var(--color-sage-dark);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-top: 6px;
+    }
+
+    .quote-card {
+      background: var(--color-card-bg);
+      border-left: 4px solid var(--color-terracotta);
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      margin: 16px 0;
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
+    .progress-section {
+      background: var(--color-card-bg);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-sage-dark);
+    }
+
+    .progress-bar-bg {
+      background: var(--color-sage-light);
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, var(--color-sage), var(--color-terracotta));
+      height: 100%;
+      width: 0%;
+      transition: width 0.4s ease;
+      border-radius: 6px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      background: var(--color-beige);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--color-card-bg);
+      color: var(--color-sage-dark);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .view-panel {
+      display: none;
+    }
+
+    .view-panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--color-card-bg);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--color-sage-dark);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-list {
+      list-style: none;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .task-item:last-child {
+      border-bottom: none;
+    }
+
+    .checkbox-custom {
+      appearance: none;
+      -webkit-appearance: none;
+      min-width: 24px;
+      min-height: 24px;
+      border: 2px solid var(--color-sage);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      margin-top: 2px;
+    }
+
+    .checkbox-custom:checked {
+      background-color: var(--color-sage);
+      border-color: var(--color-sage);
+    }
+
+    .checkbox-custom:checked::after {
+      content: '✓';
+      position: absolute;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .task-text {
+      font-size: 0.95rem;
+      color: var(--color-text-main);
+      transition: color 0.2s, text-decoration 0.2s;
+    }
+
+    .checkbox-custom:checked + .task-text {
+      text-decoration: line-through;
+      color: var(--color-text-muted);
+      opacity: 0.7;
+    }
+
+    .day-card {
+      background: var(--color-card-bg);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--color-border);
+    }
+
+    .day-card.today {
+      border: 2px solid var(--color-sage);
+      background: #F4F7F4;
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      color: var(--color-sage-dark);
+      margin-bottom: 8px;
+    }
+
+    .badge-today {
+      background: var(--color-terracotta);
+      color: white;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .reset-btn {
+      width: 100%;
+      background: var(--color-beige);
+      border: 1px solid var(--color-border);
+      color: var(--color-sage-dark);
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .info-footer {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      margin-top: 24px;
+      padding: 12px;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--color-card-bg);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-sage-dark);
+      margin-bottom: 10px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-modal {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-confirm { background: var(--color-terracotta); color: white; }
+    .btn-cancel { background: var(--color-beige); color: var(--color-text-main); }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <div class="arabic-bismillah">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+      <h1>Barakah Home Care</h1>
+      <div class="date-badge" id="currentDateDisplay">Loading Today's Date...</div>
+    </header>
+
+    <div class="quote-card">
+      “Cleanliness is half of faith.” — Prophet Muhammad (ﷺ). Take care of your home gentle step by step, for the sake of Allah.
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>Daily Non-Negotiables Progress</span>
+        <span id="dailyPercent">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="dailyProgressBar"></div>
+      </div>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('daily')">Daily View</button>
+      <button class="tab-btn" onclick="switchTab('weekly')">Weekly Schedule</button>
+      <button class="tab-btn" onclick="switchTab('history')">Weekly History</button>
+    </div>
+
+    <!-- DAILY PANEL -->
+    <div id="dailyPanel" class="view-panel active">
+      <div class="card">
+        <div class="card-title">✨ Daily Non-Negotiables</div>
+        <ul class="task-list" id="dailyTasksList"></ul>
+        <button class="reset-btn" onclick="promptResetDaily()">Reset Today's Checklist</button>
+      </div>
+    </div>
+
+    <!-- WEEKLY PANEL -->
+    <div id="weeklyPanel" class="view-panel">
+      <div class="card">
+        <div class="card-title">📅 Weekly Zone Cleaning</div>
+        <div id="weeklyTasksList"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY PANEL -->
+    <div id="historyPanel" class="view-panel">
+      <div class="card">
+        <div class="card-title">📜 Completed History Log</div>
+        <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-bottom: 12px;">
+          Saved on this browser locally.
+        </p>
+        <div id="historyLogs"></div>
+      </div>
+    </div>
+
+    <div class="info-footer">
+      💾 Saves locally on this device.<br>
+      Daily items reset automatically at midnight. Weekly resets every Monday.
+    </div>
+  </div>
+
+  <!-- RESET CONFIRMATION MODAL -->
+  <div class="modal-overlay" id="resetModal">
+    <div class="modal-card">
+      <div class="modal-title">Reset Today's Tasks?</div>
+      <p style="font-size: 0.9rem; color: var(--color-text-muted);">
+        Are you sure you want to uncheck all daily non-negotiables for today?
+      </p>
+      <div class="modal-actions">
+        <button class="btn-modal btn-cancel" onclick="closeResetModal()">Cancel</button>
+        <button class="btn-modal btn-confirm" onclick="confirmResetDaily()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DAILY_TASKS = [
+      { id: "d1", label: "Kitchen reset: dishes, clear sink, wipe counters, put food away." },
+      { id: "d2", label: "Laundry: wash, dry, fold, or put away one load as needed." },
+      { id: "d3", label: "Main living area reset: put away clutter and check the floor." },
+      { id: "d4", label: "Cat care: scoop litter, clean mess, check surrounding area." },
+      { id: "d5", label: "Bedroom reset: make beds, collect dirty clothes, remove rubbish." },
+      { id: "d6", label: "Final house reset before my husband returns home." }
+    ];
+
+    const WEEKLY_SCHEDULE = [
+      { id: "mon", day: "Monday", zone: "Downstairs bathroom", tasks: ["Clean sink & mirror", "Scrub toilet & floor", "Restock towels & soap"] },
+      { id: "tue", day: "Tuesday", zone: "Master bedroom & bathroom", tasks: ["Change sheets", "Dust surfaces", "Clean bathroom & vacuum"] },
+      { id: "wed", day: "Wednesday", zone: "Younger boys' bedroom", tasks: ["Sheets & laundry", "Dusting & clutter pickup", "Vacuum floor"] },
+      { id: "thu", day: "Thursday", zone: "Laundry room & cat area", tasks: ["Wipe treadmill & foosball table", "Deep clean cat area", "Organize laundry supplies"] },
+      { id: "fri", day: "Friday", zone: "Kitchen & living room deep clean", tasks: ["Mop living area", "Wipe appliances", "Sanitize main surfaces"] },
+      { id: "sat", day: "Saturday", zone: "Upstairs shared bathroom & catch-up", tasks: ["Clean upstairs bath", "Catch-up on pending laundry/tasks"] },
+      { id: "sun", day: "Sunday", zone: "Rest day", tasks: ["Rest day — Daily non-negotiables only"] }
+    ];
+
+    let state = {
+      lastDailyReset: "",
+      lastWeeklyResetWeek: "",
+      dailyCompleted: {},
+      weeklyCompleted: {},
+      history: []
+    };
+
+    function initApp() {
+      loadState();
+      checkAutomaticResets();
+      renderDate();
+      renderDaily();
+      renderWeekly();
+      renderHistory();
+      updateProgress();
+    }
+
+    function getTodayString() {
+      const now = new Date();
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    }
+
+    function getWeekIdentifier() {
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+      const yearStart = new Date(d.getFullYear(), 0, 1);
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      return `${d.getFullYear()}-W${weekNo}`;
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem("barakah_home_state");
+      if (saved) {
+        try {
+          state = JSON.parse(saved);
+        } catch (e) {
+          console.error("Error reading localStorage", e);
+        }
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem("barakah_home_state", JSON.stringify(state));
+    }
+
+    function checkAutomaticResets() {
+      const today = getTodayString();
+      const currentWeek = getWeekIdentifier();
+
+      // Daily Reset
+      if (state.lastDailyReset !== today) {
+        // Record completed tasks to history
+        recordHistoryLog(state.lastDailyReset || today);
+        state.dailyCompleted = {};
+        state.lastDailyReset = today;
+      }
+
+      // Weekly Reset
+      if (state.lastWeeklyResetWeek !== currentWeek) {
+        state.weeklyCompleted = {};
+        state.lastWeeklyResetWeek = currentWeek;
+      }
+
+      saveState();
+    }
+
+    function recordHistoryLog(dateStr) {
+      const count = Object.values(state.dailyCompleted || {}).filter(Boolean).length;
+      if (count > 0) {
+        state.history.unshift({
+          date: dateStr,
+          completedCount: count,
+          totalCount: DAILY_TASKS.length
+        });
+        state.history = state.history.slice(0, 14); // keep last 2 weeks
+      }
+    }
+
+    function renderDate() {
+      const options = { weekday: 'long', month: 'short', day: 'numeric' };
+      document.getElementById("currentDateDisplay").innerText = new Date().toLocaleDateString(undefined, options);
+    }
+
+    function renderDaily() {
+      const listEl = document.getElementById("dailyTasksList");
+      listEl.innerHTML = "";
+      DAILY_TASKS.forEach(task => {
+        const checked = !!state.dailyCompleted[task.id];
+        const li = document.createElement("li");
+        li.className = "task-item";
+        li.innerHTML = `
+          <input type="checkbox" class="checkbox-custom" ${checked ? 'checked' : ''} onchange="toggleDaily('${task.id}')">
+          <span class="task-text">${task.label}</span>
+        `;
+        listEl.appendChild(li);
+      });
+    }
+
+    function toggleDaily(id) {
+      state.dailyCompleted[id] = !state.dailyCompleted[id];
+      saveState();
+      updateProgress();
+    }
+
+    function renderWeekly() {
+      const listEl = document.getElementById("weeklyTasksList");
+      listEl.innerHTML = "";
+
+      const todayIndex = new Date().getDay(); // 0 is Sun, 1 is Mon...
+      const dayMap = { 1: "mon", 2: "tue", 3: "wed", 4: "thu", 5: "fri", 6: "sat", 0: "sun" };
+      const todayId = dayMap[todayIndex];
+
+      WEEKLY_SCHEDULE.forEach(item => {
+        const isToday = item.id === todayId;
+        const card = document.createElement("div");
+        card.className = `day-card ${isToday ? 'today' : ''}`;
+
+        let tasksHtml = "";
+        item.tasks.forEach((t, idx) => {
+          const key = `${item.id}_${idx}`;
+          const checked = !!state.weeklyCompleted[key];
+          tasksHtml += `
+            <div class="task-item">
+              <input type="checkbox" class="checkbox-custom" ${checked ? 'checked' : ''} onchange="toggleWeekly('${key}')">
+              <span class="task-text">${t}</span>
+            </div>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="day-header">
+            <span>${item.day}: ${item.zone}</span>
+            ${isToday ? '<span class="badge-today">Today</span>' : ''}
+          </div>
+          <div>${tasksHtml}</div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    function toggleWeekly(key) {
+      state.weeklyCompleted[key] = !state.weeklyCompleted[key];
+      saveState();
+    }
+
+    function updateProgress() {
+      const total = DAILY_TASKS.length;
+      const count = Object.values(state.dailyCompleted || {}).filter(Boolean).length;
+      const percent = Math.round((count / total) * 100);
+
+      document.getElementById("dailyPercent").innerText = `${percent}%`;
+      document.getElementById("dailyProgressBar").style.width = `${percent}%`;
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+
+      if (tabName === 'daily') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('dailyPanel').classList.add('active');
+      } else if (tabName === 'weekly') {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('weeklyPanel').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab-btn')[2].classList.add('active');
+        document.getElementById('historyPanel').classList.add('active');
+      }
+    }
+
+    function renderHistory() {
+      const container = document.getElementById("historyLogs");
+      if (!state.history || state.history.length === 0) {
+        container.innerHTML = `<p style="font-size: 0.85rem; color: var(--color-text-muted);">No history recorded yet. Complete tasks today and check back tomorrow!</p>`;
+        return;
+      }
+
+      let html = "";
+      state.history.forEach(log => {
+        html += `
+          <div style="display:flex; justify-size:space-between; justify-content:space-between; padding: 8px 0; border-bottom: 1px dashed var(--color-border); font-size: 0.88rem;">
+            <span>${log.date}</span>
+            <strong>${log.completedCount} / ${log.totalCount} completed</strong>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function promptResetDaily() {
+      document.getElementById("resetModal").classList.add("active");
+    }
+
+    function closeResetModal() {
+      document.getElementById("resetModal").classList.remove("active");
+    }
+
+    function confirmResetDaily() {
+      state.dailyCompleted = {};
+      saveState();
+      renderDaily();
+      updateProgress();
+      closeResetModal();
+    }
+
+    // Initialize on page load
+    window.onload = initApp;
+  </script>
+</body>
+</html>
